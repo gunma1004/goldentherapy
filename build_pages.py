@@ -2,7 +2,7 @@
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_FILE = os.path.join(BASE_DIR, "template.html")
-BASE_URL = "https://goldentherapy.netlify.app"
+BASE_URL = "https://goldentherapy2.netlify.app"
 
 LOCATIONS = {
     "seoul": {
@@ -148,3 +148,4 @@ def generate_pages():
 
 if __name__ == "__main__":
     generate_pages()
+

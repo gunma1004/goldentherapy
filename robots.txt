@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://goldentherapy.netlify.app/sitemap.xml
+Sitemap: https://goldentherapy2.netlify.app/sitemap.xml

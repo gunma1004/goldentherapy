@@ -1,7 +1,7 @@
 ﻿import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-BASE_URL = "https://goldentherapy.netlify.app"
+BASE_URL = "https://goldentherapy2.netlify.app"
 
 urls = [f"{BASE_URL}/"]
 
@@ -22,3 +22,4 @@ with open(os.path.join(BASE_DIR, "robots.txt"), "w", encoding="utf-8") as f:
     f.write(f"User-agent: *\nAllow: /\n\nSitemap: {BASE_URL}/sitemap.xml\n")
 
 print("✅ sitemap.xml 및 robots.txt 갱신 완료")
+
