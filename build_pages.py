@@ -4,6 +4,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_FILE = os.path.join(BASE_DIR, "template.html")
 BASE_URL = "https://goldentherapy2.netlify.app"
 
+# 회피 키워드 조합 풀 (출장 + [회피단어] + 마사지)
+MODIFIER_WORD = "홈케어"  # 기본 회피단어: "출장 홈케어 마사지"
+
 LOCATIONS = {
     "seoul": {
         "name": "서울",
@@ -103,12 +106,14 @@ def generate_pages():
             gu_name = gu_data["name"]
             dongs = gu_data["dongs"]
 
-            # 구 단위 생성
+            # [구 단위 페이지 생성]
             gu_dir = os.path.join(BASE_DIR, sido_slug, gu_slug)
             os.makedirs(gu_dir, exist_ok=True)
 
-            gu_title = f"{gu_name} 출장마사지 | 한국골든테라피 {gu_name} 전지역 30분 도착"
-            gu_desc = f"{gu_name} 전 지역 출장마사지 전문. 100% 현장 후불제, 30분 내 빠른 방문 1:1 맞춤 홈케어 테라피를 안내합니다."
+            # 예: 서울 강남구 출장 홈케어 마사지 | 한국골든테라피 ...
+            gu_target_keyword = f"{sido_name} {gu_name} 출장 {MODIFIER_WORD} 마사지"
+            gu_title = f"{gu_target_keyword} | 한국골든테라피 {gu_name} 전지역 케어"
+            gu_desc = f"{sido_name} {gu_name} 전 지역 출장 {MODIFIER_WORD} 마사지 전문. 100% 현장 후불제, 빠른 방문 1:1 맞춤 프리미엄 힐링 테라피."
             gu_url = f"{BASE_URL}/{sido_slug}/{gu_slug}/"
 
             dong_links = "".join([f'<a href="/{sido_slug}/{gu_slug}/{d}/" class="chip">{d}</a>' for d in dongs])
@@ -116,20 +121,22 @@ def generate_pages():
             gu_html = template.replace("{{TITLE}}", gu_title)\
                               .replace("{{DESC}}", gu_desc)\
                               .replace("{{CANONICAL_URL}}", gu_url)\
-                              .replace("{{REGION_NAME}}", gu_name)\
+                              .replace("{{REGION_NAME}}", f"{gu_name} 출장 {MODIFIER_WORD} 마사지")\
                               .replace("{{SUB_AREA_LINKS}}", dong_links)
 
             with open(os.path.join(gu_dir, "index.html"), "w", encoding="utf-8") as f:
                 f.write(gu_html)
             count += 1
 
-            # 동 단위 생성
+            # [동 단위 페이지 생성]
             for dong in dongs:
                 dong_dir = os.path.join(gu_dir, dong)
                 os.makedirs(dong_dir, exist_ok=True)
 
-                dong_title = f"{gu_name} {dong} 출장마사지 | 한국골든테라피 {dong} 24시 방문케어"
-                dong_desc = f"{gu_name} {dong} 출장마사지 100% 후불제 매칭. {dong} 전 구역 30분 도착, 맞춤형 힐링 테라피 상담 0507-1280-3360."
+                # 예: 서울 강남구 역삼동 출장 홈케어 마사지 | 한국골든테라피 ...
+                dong_target_keyword = f"{sido_name} {gu_name} {dong} 출장 {MODIFIER_WORD} 마사지"
+                dong_title = f"{dong_target_keyword} | 한국골든테라피 {dong} 24시 케어"
+                dong_desc = f"{sido_name} {gu_name} {dong} 출장 {MODIFIER_WORD} 마사지 100% 후불제 매칭. {dong} 전 구역 30분 도착, 맞춤형 힐링 테라피 상담 0507-1280-3360."
                 dong_url = f"{BASE_URL}/{sido_slug}/{gu_slug}/{dong}/"
 
                 neighbor_links = "".join([f'<a href="/{sido_slug}/{gu_slug}/{d}/" class="chip">{d}</a>' for d in dongs if d != dong])
@@ -137,15 +144,14 @@ def generate_pages():
                 dong_html = template.replace("{{TITLE}}", dong_title)\
                                     .replace("{{DESC}}", dong_desc)\
                                     .replace("{{CANONICAL_URL}}", dong_url)\
-                                    .replace("{{REGION_NAME}}", f"{gu_name} {dong}")\
+                                    .replace("{{REGION_NAME}}", f"{dong} 출장 {MODIFIER_WORD} 마사지")\
                                     .replace("{{SUB_AREA_LINKS}}", neighbor_links)
 
                 with open(os.path.join(dong_dir, "index.html"), "w", encoding="utf-8") as f:
                     f.write(dong_html)
                 count += 1
 
-    print(f"✅ goldentherapy.netlify.app 도메인 기준 {count}개 페이지 생성 완료")
+    print(f"✅ goldentherapy.netlify.app 도메인 기준 {count}개 페이지 생성 완료 (회피 키워드: 출장 {MODIFIER_WORD} 마사지 반영)")
 
 if __name__ == "__main__":
     generate_pages()
-
